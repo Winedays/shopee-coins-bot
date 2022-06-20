@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - test
 
 jobs:
   build:
@@ -14,16 +15,26 @@ jobs:
         with:
           username: ${{ secrets.DOCKERHUB_USERNAME }}
           password: ${{ secrets.DOCKERHUB_TOKEN }}
-  tag:
-    name: Add tags to repository
-    runs-on: ubuntu-latest
-    steps:
-      - uses: actions/checkout@v3
-      - id: version
-        uses: wdzeng/version@v1
+      - name: Checkout
+        uses: actions/checkout@v3
+      - name: Install pnpm and dependencies
+        uses: pnpm/action-setup@v2.2.2
         with:
-          prefix: v
-      - name: Add tags
-        run: |
-          git tag -f ${{ steps.version.outputs.version }} main && \
-          git push -f origin ${{ steps.version.outputs.version }}
+          run_install: true
+      - name: Build project
+        run: pnpm build
+      - name: ls
+        run: ls -al
+#   tag:
+#     name: Add tags to repository
+#     runs-on: ubuntu-latest
+#     steps:
+#       - uses: actions/checkout@v3
+#       - id: version
+#         uses: wdzeng/version@v1
+#         with:
+#           prefix: v
+#       - name: Add tags
+#         run: |
+#           git tag -f ${{ steps.version.outputs.version }} main && \
+#           git push -f origin ${{ steps.version.outputs.version }}
