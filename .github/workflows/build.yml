@@ -21,6 +21,11 @@ jobs:
         run: pnpm build
       - name: ls
         run: ls -al
+      - name: Archive production artifacts
+        uses: actions/upload-artifact@v3
+        with:
+          name: dist
+          path: dist
 #   tag:
 #     name: Add tags to repository
 #     runs-on: ubuntu-latest
