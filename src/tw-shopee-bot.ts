@@ -347,7 +347,19 @@ export default class TaiwanShopeeBot {
     }
 
     // Receive coins.
-    return await this.tryReceiveCoin()
+    await this.tryReceiveCoin()
+    
+    // test
+    const urlLogin = 'https://shopee.tw/pc_event/?url=https%3A%2F%2Fgames.shopee.tw%2Fluckydraw%2Fbox%2Factivity%2Fb752285f5b500579%3Fsmtt%3D9%26deep_and_web%3D1'
+    await this.driver.get(urlLogin)
+    await new Promise(res => setTimeout(res, 4000))
+    const curUrl = await this.driver.getCurrentUrl()
+    logger.debug('Currently at url: ' + curUrl)
+    
+    const xpath = `${xpathByText('div', '剩餘機會')}`
+    await this.driver.wait(until.elementLocated(By.xpath(xpath)), waitTimeout)
+    const btnReceiveCoin = await this.driver.findElement(By.xpath(xpath))
+    logger.error('btnReceiveCoin: ' + btnReceiveCoin)
   }
 
   private async takeScreenshot(screenshotPath: string): Promise<void> {
